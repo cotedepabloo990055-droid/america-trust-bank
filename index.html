@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f6f8fb">
+  <meta name="theme-color" content="#f5f7fa">
   <title>America Trust Bank — Demo</title>
 
   <style>
@@ -25,7 +25,7 @@
     }
 
     header {
-      padding: 28px 22px 18px;
+      padding: 25px 20px 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -37,56 +37,60 @@
     }
 
     .demo {
-      font-size: 11px;
-      padding: 5px 9px;
-      border-radius: 20px;
+      font-size: 10px;
+      padding: 5px 8px;
+      border-radius: 15px;
       background: #eef1f5;
       color: #667085;
-      font-weight: 700;
+      font-weight: 800;
     }
 
     main {
-      padding: 0 18px 90px;
+      padding: 0 18px 100px;
     }
 
+    .screen { display: none; }
+    .screen.active { display: block; }
+
     .balance-card {
+      margin-top: 10px;
       border-radius: 24px;
-      padding: 27px 24px;
+      padding: 28px 23px;
       background: #172033;
       color: white;
-      box-shadow: 0 15px 35px rgba(23, 32, 51, .18);
+      box-shadow: 0 15px 35px rgba(23,32,51,.18);
     }
 
     .balance-label {
       font-size: 14px;
-      opacity: .75;
+      opacity: .72;
     }
 
     .balance {
-      margin-top: 9px;
-      font-size: 38px;
+      margin-top: 8px;
+      font-size: 37px;
       font-weight: 800;
       letter-spacing: -1px;
     }
 
     .account {
-      margin-top: 14px;
+      margin-top: 13px;
       font-size: 13px;
-      opacity: .65;
+      opacity: .62;
     }
 
     .actions {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      margin: 18px 0 28px;
+      margin: 18px 0 30px;
     }
 
     button {
       border: 0;
-      border-radius: 16px;
-      padding: 15px 8px;
-      background: #f0f2f5;
+      border-radius: 15px;
+      padding: 14px 8px;
+      background: #eef1f5;
       color: #172033;
       font-weight: 700;
       font-size: 14px;
@@ -97,16 +101,21 @@
       transform: scale(.98);
     }
 
+    .primary {
+      background: #172033;
+      color: white;
+    }
+
     h2 {
-      font-size: 19px;
-      margin: 0 0 13px;
+      margin: 0 0 14px;
+      font-size: 20px;
     }
 
     .transaction {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 4px;
+      padding: 16px 3px;
       border-bottom: 1px solid #edf0f3;
     }
 
@@ -118,36 +127,78 @@
     .transaction span {
       display: block;
       margin-top: 4px;
-      font-size: 12px;
       color: #7b8494;
+      font-size: 12px;
     }
 
     .amount {
       font-weight: 800;
-      font-size: 15px;
+      font-size: 14px;
     }
 
     .positive { color: #157347; }
     .negative { color: #b42318; }
 
+    .panel {
+      margin-top: 12px;
+      padding: 22px;
+      border-radius: 20px;
+      background: #f7f8fa;
+    }
+
+    .profile-row {
+      padding: 15px 0;
+      border-bottom: 1px solid #e6e9ee;
+    }
+
+    .profile-row:last-child {
+      border-bottom: 0;
+    }
+
+    .profile-label {
+      color: #7b8494;
+      font-size: 12px;
+    }
+
+    .profile-value {
+      margin-top: 4px;
+      font-weight: 700;
+    }
+
+    .demo-note {
+      margin-top: 20px;
+      padding: 13px;
+      border-radius: 13px;
+      background: #f0f2f5;
+      color: #667085;
+      font-size: 12px;
+      line-height: 1.5;
+      text-align: center;
+    }
+
     nav {
       position: fixed;
-      bottom: 0;
       left: 50%;
+      bottom: 0;
       transform: translateX(-50%);
       width: min(520px, 100%);
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      background: rgba(255,255,255,.94);
+      background: rgba(255,255,255,.96);
       border-top: 1px solid #e9edf2;
-      padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+      padding: 9px 10px calc(9px + env(safe-area-inset-bottom));
       backdrop-filter: blur(12px);
     }
 
     nav button {
       background: transparent;
-      font-size: 12px;
       color: #667085;
+      font-size: 12px;
+    }
+
+    nav button.active {
+      color: #172033;
+      font-weight: 800;
     }
 
     .toast {
@@ -155,14 +206,15 @@
       left: 50%;
       bottom: 85px;
       transform: translateX(-50%);
-      background: #172033;
-      color: white;
       padding: 12px 17px;
       border-radius: 12px;
+      background: #172033;
+      color: white;
       font-size: 13px;
       opacity: 0;
       pointer-events: none;
-      transition: opacity .25s ease;
+      transition: opacity .2s ease;
+      z-index: 10;
     }
 
     .toast.show {
@@ -173,64 +225,161 @@
 
 <body>
   <div class="app">
+
     <header>
       <div class="brand">America Trust Bank</div>
       <div class="demo">DEMO</div>
     </header>
 
     <main>
-      <section class="balance-card">
-        <div class="balance-label">Available Balance</div>
-        <div class="balance">$100,000,000.00</div>
-        <div class="account">Account •••• 4821</div>
+
+      <!-- HOME -->
+      <section id="home" class="screen active">
+        <div class="balance-card">
+          <div class="balance-label">Available Balance</div>
+          <div class="balance">$100,000,000.00</div>
+          <div class="account">Account •••• 4821</div>
+        </div>
+
+        <div class="actions">
+          <button onclick="showDemo('Send')">Send</button>
+          <button onclick="showDemo('Receive')">Receive</button>
+          <button onclick="showDemo('Pay')">Pay</button>
+        </div>
+
+        <h2>Recent Transactions</h2>
+
+        <div class="transaction">
+          <div>
+            <strong>Salary Deposit</strong>
+            <span>Today • Demo transaction</span>
+          </div>
+          <div class="amount positive">+$8,500.00</div>
+        </div>
+
+        <div class="transaction">
+          <div>
+            <strong>Online Purchase</strong>
+            <span>Yesterday • Demo transaction</span>
+          </div>
+          <div class="amount negative">−$240.50</div>
+        </div>
+
+        <div class="transaction">
+          <div>
+            <strong>Transfer Received</strong>
+            <span>Aug 24 • Demo transaction</span>
+          </div>
+          <div class="amount positive">+$2,000.00</div>
+        </div>
       </section>
 
-      <section class="actions">
-        <button onclick="showMessage('Send is disabled in this demo.')">Send</button>
-        <button onclick="showMessage('Receive is disabled in this demo.')">Receive</button>
-        <button onclick="showMessage('Payments are disabled in this demo.')">Pay</button>
+      <!-- TRANSACTIONS -->
+      <section id="transactions" class="screen">
+        <h2>Transactions</h2>
+
+        <div class="panel">
+          <div class="transaction">
+            <div>
+              <strong>Salary Deposit</strong>
+              <span>Today • Demo</span>
+            </div>
+            <div class="amount positive">+$8,500.00</div>
+          </div>
+
+          <div class="transaction">
+            <div>
+              <strong>Online Purchase</strong>
+              <span>Yesterday • Demo</span>
+            </div>
+            <div class="amount negative">−$240.50</div>
+          </div>
+
+          <div class="transaction">
+            <div>
+              <strong>Transfer Received</strong>
+              <span>Aug 24 • Demo</span>
+            </div>
+            <div class="amount positive">+$2,000.00</div>
+          </div>
+
+          <div class="transaction">
+            <div>
+              <strong>Subscription</strong>
+              <span>Aug 22 • Demo</span>
+            </div>
+            <div class="amount negative">−$49.99</div>
+          </div>
+        </div>
+
+        <div class="demo-note">
+          All transactions shown here are fictional demo data.
+        </div>
       </section>
 
-      <h2>Recent Transactions</h2>
+      <!-- PROFILE -->
+      <section id="profile" class="screen">
+        <h2>Profile</h2>
 
-      <div class="transaction">
-        <div>
-          <strong>Salary Deposit</strong>
-          <span>Today • Demo transaction</span>
-        </div>
-        <div class="amount positive">+$8,500.00</div>
-      </div>
+        <div class="panel">
+          <div class="profile-row">
+            <div class="profile-label">Account holder</div>
+            <div class="profile-value">Demo User</div>
+          </div>
 
-      <div class="transaction">
-        <div>
-          <strong>Online Purchase</strong>
-          <span>Yesterday • Demo transaction</span>
-        </div>
-        <div class="amount negative">−$240.50</div>
-      </div>
+          <div class="profile-row">
+            <div class="profile-label">Account number</div>
+            <div class="profile-value">•••• 4821</div>
+          </div>
 
-      <div class="transaction">
-        <div>
-          <strong>Transfer Received</strong>
-          <span>Aug 24 • Demo transaction</span>
+          <div class="profile-row">
+            <div class="profile-label">Account type</div>
+            <div class="profile-value">Checking — Demo</div>
+          </div>
+
+          <div class="profile-row">
+            <div class="profile-label">Status</div>
+            <div class="profile-value">Demo Account</div>
+          </div>
         </div>
-        <div class="amount positive">+$2,000.00</div>
-      </div>
+
+        <div class="demo-note">
+          This fictional interface does not connect to a real bank account or process real money.
+        </div>
+      </section>
+
     </main>
 
     <nav>
-      <button onclick="showMessage('Home')">Home</button>
-      <button onclick="showMessage('Transactions')">Transactions</button>
-      <button onclick="showMessage('Profile')">Profile</button>
+      <button id="navHome" class="active" onclick="openScreen('home', this)">Home</button>
+      <button id="navTransactions" onclick="openScreen('transactions', this)">Transactions</button>
+      <button id="navProfile" onclick="openScreen('profile', this)">Profile</button>
     </nav>
+
   </div>
 
   <div id="toast" class="toast"></div>
 
   <script>
-    function showMessage(message) {
+    function openScreen(screenId, button) {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+      });
+
+      document.getElementById(screenId).classList.add("active");
+
+      document.querySelectorAll("nav button").forEach(btn => {
+        btn.classList.remove("active");
+      });
+
+      button.classList.add("active");
+
+      window.scrollTo(0, 0);
+    }
+
+    function showDemo(action) {
       const toast = document.getElementById("toast");
-      toast.textContent = message;
+      toast.textContent = action + " is disabled in this demo.";
       toast.classList.add("show");
 
       setTimeout(() => {

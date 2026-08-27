@@ -70,7 +70,6 @@
       margin-top: 8px;
       font-size: 37px;
       font-weight: 800;
-      letter-spacing: -1px;
     }
 
     .account {
@@ -97,18 +96,51 @@
       cursor: pointer;
     }
 
-    button:active {
-      transform: scale(.98);
-    }
+    button:active { transform: scale(.98); }
 
     .primary {
+      width: 100%;
       background: #172033;
       color: white;
+      margin-top: 8px;
+    }
+
+    .back {
+      background: transparent;
+      padding-left: 0;
+      margin-bottom: 5px;
     }
 
     h2 {
       margin: 0 0 14px;
       font-size: 20px;
+    }
+
+    .panel {
+      padding: 20px;
+      border-radius: 20px;
+      background: #f7f8fa;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #dfe3e8;
+      border-radius: 13px;
+      font-size: 16px;
+      outline: none;
+      background: white;
+    }
+
+    input:focus {
+      border-color: #172033;
     }
 
     .transaction {
@@ -139,37 +171,26 @@
     .positive { color: #157347; }
     .negative { color: #b42318; }
 
-    .panel {
-      margin-top: 12px;
-      padding: 22px;
-      border-radius: 20px;
-      background: #f7f8fa;
+    .receive-box {
+      text-align: center;
+      padding: 30px 15px;
     }
 
-    .profile-row {
-      padding: 15px 0;
-      border-bottom: 1px solid #e6e9ee;
+    .fake-code {
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 16px;
+      background: #e9edf2;
+      font-weight: 800;
+      letter-spacing: 2px;
+      max-width: 260px;
     }
 
-    .profile-row:last-child {
-      border-bottom: 0;
-    }
-
-    .profile-label {
-      color: #7b8494;
-      font-size: 12px;
-    }
-
-    .profile-value {
-      margin-top: 4px;
-      font-weight: 700;
-    }
-
-    .demo-note {
-      margin-top: 20px;
-      padding: 13px;
-      border-radius: 13px;
-      background: #f0f2f5;
+    .note {
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #eef1f5;
       color: #667085;
       font-size: 12px;
       line-height: 1.5;
@@ -215,11 +236,11 @@
       pointer-events: none;
       transition: opacity .2s ease;
       z-index: 10;
+      width: max-content;
+      max-width: 90%;
     }
 
-    .toast.show {
-      opacity: 1;
-    }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 
@@ -242,9 +263,9 @@
         </div>
 
         <div class="actions">
-          <button onclick="showDemo('Send')">Send</button>
-          <button onclick="showDemo('Receive')">Receive</button>
-          <button onclick="showDemo('Pay')">Pay</button>
+          <button onclick="openAction('send')">Send</button>
+          <button onclick="openAction('receive')">Receive</button>
+          <button onclick="openAction('pay')">Pay</button>
         </div>
 
         <h2>Recent Transactions</h2>
@@ -264,13 +285,67 @@
           </div>
           <div class="amount negative">−$240.50</div>
         </div>
+      </section>
 
-        <div class="transaction">
-          <div>
-            <strong>Transfer Received</strong>
-            <span>Aug 24 • Demo transaction</span>
+      <!-- SEND -->
+      <section id="send" class="screen">
+        <button class="back" onclick="goHome()">← Back</button>
+        <h2>Send Money</h2>
+
+        <div class="panel">
+          <label for="recipient">Recipient</label>
+          <input id="recipient" type="text" placeholder="Demo recipient">
+
+          <label for="sendAmount">Amount</label>
+          <input id="sendAmount" type="number" placeholder="0.00" min="0">
+
+          <button class="primary" onclick="simulateTransfer()">Continue</button>
+
+          <div class="note">
+            This is a fictional demo. No money will be transferred.
           </div>
-          <div class="amount positive">+$2,000.00</div>
+        </div>
+      </section>
+
+      <!-- RECEIVE -->
+      <section id="receive" class="screen">
+        <button class="back" onclick="goHome()">← Back</button>
+        <h2>Receive Money</h2>
+
+        <div class="panel receive-box">
+          <p>Demo receiving code</p>
+
+          <div class="fake-code">
+            ATB-DEMO-4821
+          </div>
+
+          <button class="primary" onclick="showToast('Demo receiving code copied')">
+            Copy Code
+          </button>
+
+          <div class="note">
+            This code is fictional and cannot receive real money.
+          </div>
+        </div>
+      </section>
+
+      <!-- PAY -->
+      <section id="pay" class="screen">
+        <button class="back" onclick="goHome()">← Back</button>
+        <h2>Pay</h2>
+
+        <div class="panel">
+          <label for="merchant">Merchant</label>
+          <input id="merchant" type="text" placeholder="Demo merchant">
+
+          <label for="payAmount">Amount</label>
+          <input id="payAmount" type="number" placeholder="0.00" min="0">
+
+          <button class="primary" onclick="simulatePayment()">Pay</button>
+
+          <div class="note">
+            This is a fictional demo. No real payment will be made.
+          </div>
         </div>
       </section>
 
@@ -302,18 +377,6 @@
             </div>
             <div class="amount positive">+$2,000.00</div>
           </div>
-
-          <div class="transaction">
-            <div>
-              <strong>Subscription</strong>
-              <span>Aug 22 • Demo</span>
-            </div>
-            <div class="amount negative">−$49.99</div>
-          </div>
-        </div>
-
-        <div class="demo-note">
-          All transactions shown here are fictional demo data.
         </div>
       </section>
 
@@ -322,69 +385,110 @@
         <h2>Profile</h2>
 
         <div class="panel">
-          <div class="profile-row">
-            <div class="profile-label">Account holder</div>
-            <div class="profile-value">Demo User</div>
+          <div class="transaction">
+            <div>
+              <strong>Account holder</strong>
+              <span>Demo User</span>
+            </div>
           </div>
 
-          <div class="profile-row">
-            <div class="profile-label">Account number</div>
-            <div class="profile-value">•••• 4821</div>
+          <div class="transaction">
+            <div>
+              <strong>Account number</strong>
+              <span>•••• 4821</span>
+            </div>
           </div>
 
-          <div class="profile-row">
-            <div class="profile-label">Account type</div>
-            <div class="profile-value">Checking — Demo</div>
-          </div>
-
-          <div class="profile-row">
-            <div class="profile-label">Status</div>
-            <div class="profile-value">Demo Account</div>
+          <div class="transaction">
+            <div>
+              <strong>Account type</strong>
+              <span>Checking — Demo</span>
+            </div>
           </div>
         </div>
 
-        <div class="demo-note">
-          This fictional interface does not connect to a real bank account or process real money.
+        <div class="note">
+          Fictional account information. No real banking services are connected.
         </div>
       </section>
 
     </main>
 
     <nav>
-      <button id="navHome" class="active" onclick="openScreen('home', this)">Home</button>
-      <button id="navTransactions" onclick="openScreen('transactions', this)">Transactions</button>
-      <button id="navProfile" onclick="openScreen('profile', this)">Profile</button>
+      <button id="navHome" class="active" onclick="showScreen('home', this)">Home</button>
+      <button id="navTransactions" onclick="showScreen('transactions', this)">Transactions</button>
+      <button id="navProfile" onclick="showScreen('profile', this)">Profile</button>
     </nav>
-
   </div>
 
   <div id="toast" class="toast"></div>
 
   <script>
-    function openScreen(screenId, button) {
+    function showScreen(id, button) {
       document.querySelectorAll(".screen").forEach(screen => {
         screen.classList.remove("active");
       });
 
-      document.getElementById(screenId).classList.add("active");
+      document.getElementById(id).classList.add("active");
 
       document.querySelectorAll("nav button").forEach(btn => {
         btn.classList.remove("active");
       });
 
       button.classList.add("active");
-
       window.scrollTo(0, 0);
     }
 
-    function showDemo(action) {
+    function openAction(id) {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+      });
+
+      document.getElementById(id).classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    function goHome() {
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+      });
+
+      document.getElementById("home").classList.add("active");
+      window.scrollTo(0, 0);
+    }
+
+    function simulateTransfer() {
+      const recipient = document.getElementById("recipient").value.trim();
+      const amount = document.getElementById("sendAmount").value;
+
+      if (!recipient || !amount || Number(amount) <= 0) {
+        showToast("Enter a demo recipient and amount");
+        return;
+      }
+
+      showToast("Demo transfer prepared — no money moved");
+    }
+
+    function simulatePayment() {
+      const merchant = document.getElementById("merchant").value.trim();
+      const amount = document.getElementById("payAmount").value;
+
+      if (!merchant || !amount || Number(amount) <= 0) {
+        showToast("Enter a demo merchant and amount");
+        return;
+      }
+
+      showToast("Demo payment prepared — no money moved");
+    }
+
+    function showToast(message) {
       const toast = document.getElementById("toast");
-      toast.textContent = action + " is disabled in this demo.";
+      toast.textContent = message;
       toast.classList.add("show");
 
       setTimeout(() => {
         toast.classList.remove("show");
-      }, 2200);
+      }, 2400);
     }
   </script>
 </body>
